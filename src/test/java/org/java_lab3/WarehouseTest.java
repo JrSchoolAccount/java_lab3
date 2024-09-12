@@ -1,12 +1,46 @@
 package org.java_lab3;
 
+import org.java_lab3.entities.Product;
+import org.java_lab3.entities.ProductType;
+import org.java_lab3.service.Warehouse;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class WarehouseTest {
+
     @Test
-    void test() {
-        assertThat(true).isTrue();
+    void shouldThrowExceptionWhenNameIsEmptyOrNull() {
+        Warehouse warehouse = new Warehouse();
+
+        assertThatThrownBy(() -> warehouse.newProduct(1, "", ProductType.ARMOR, 10, LocalDateTime.now(), LocalDateTime.now()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product name cannot be null or empty");
     }
+
+
+    @Test
+    void shouldAddNewProductSuccessfully(){
+        Warehouse warehouse = new Warehouse();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
+
+        List<Product> products = warehouse.getProducts();
+        assertThat(products.size()).isEqualTo(1);
+
+        Product product = products.getFirst();
+        assertThat(product.id()).isEqualTo(1);
+        assertThat(product.name()).isEqualTo("Broad sword");
+        assertThat(product.type()).isEqualTo(ProductType.WEAPON);
+        assertThat(product.rating()).isEqualTo(2);
+        assertThat(product.created()).isEqualTo(now);
+        assertThat(product.modified()).isEqualTo(now);
+    }
+
 }
