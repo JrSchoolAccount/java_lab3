@@ -1,12 +1,12 @@
-package org.example;
+package org.java_lab3;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AppIT {
+class WarehouseTest {
     @Test
-    void itTest() {
-        assertThat(false).isFalse();
+    void test() {
+        assertThat(true).isTrue();
     }
 }
