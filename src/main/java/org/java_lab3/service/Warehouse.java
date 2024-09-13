@@ -26,11 +26,11 @@ public class Warehouse {
         return new ArrayList<>(products);
     }
 
-    public void getProductById(int id) {
+    public Product getProductById(int id) {
 
-        products.stream()
-                .filter(product -> product.id() == id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
+            return products.stream()
+                    .filter(product -> product.id() == id)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
     }
 }

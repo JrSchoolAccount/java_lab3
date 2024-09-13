@@ -55,7 +55,18 @@ class WarehouseTest {
         assertThatThrownBy(() -> warehouse.getProductById(2))
         .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Product with id: 2, does not exist");
+    }
 
+    @Test
+    void shouldGetProductById1ThenReturnProductNamedBroadsword(){
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
+
+        assertThat(warehouse.getProductById(1))
+                .extracting(Product::name)
+                .isEqualTo("Broad sword");
     }
 
 }
