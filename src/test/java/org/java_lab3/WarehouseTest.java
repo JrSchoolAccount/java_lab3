@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -41,6 +42,20 @@ class WarehouseTest {
         assertThat(product.rating()).isEqualTo(2);
         assertThat(product.created()).isEqualTo(now);
         assertThat(product.modified()).isEqualTo(now);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToFindProductThatDoesNotExist(){
+        Warehouse warehouse = new Warehouse();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
+
+        assertThatThrownBy(() -> warehouse.getProductById(2))
+        .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product with id: 2, does not exist");
+
     }
 
 }
