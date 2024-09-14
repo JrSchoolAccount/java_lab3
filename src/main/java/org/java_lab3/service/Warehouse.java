@@ -5,7 +5,9 @@ import org.java_lab3.entities.ProductType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
@@ -32,5 +34,15 @@ public class Warehouse {
                     .filter(product -> product.id() == id)
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
+    }
+
+
+    public List<Product> sortAtoZ() {
+        if (products.isEmpty()) {
+            throw new IllegalStateException("No products available to sort");
+        }
+        return products.stream()
+                .sorted(Comparator.comparing(Product::name))
+                .collect(Collectors.toList());
     }
 }

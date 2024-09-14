@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -69,4 +68,48 @@ class WarehouseTest {
                 .isEqualTo("Broad sword");
     }
 
+    @Test
+    void shouldReturnAllProducts(){
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.newProduct(1, "Broad sword", ProductType.ARMOR, 2, now, now);
+        warehouse.newProduct(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now);
+        warehouse.newProduct(3, "Chain mail", ProductType.WEAPON, 4, now, now);
+
+        List<Product> products = warehouse.getProducts();
+        assertThat(products.size()).isEqualTo(3);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenListIsEmpty(){
+        Warehouse warehouse = new Warehouse();
+
+        assertThatThrownBy(warehouse::sortAtoZ)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("No products available to sort");
+    }
+
+
+    @Test
+    void shouldReturnSortedAToZ(){
+        Warehouse warehouse = new Warehouse();
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.newProduct(1, "Broad sword", ProductType.ARMOR, 2, now, now);
+        warehouse.newProduct(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now);
+        warehouse.newProduct(3, "Chain mail", ProductType.WEAPON, 4, now, now);
+
+        List<Product> sortedProducts = warehouse.sortAtoZ();
+
+
+        List<Product> expectedSortedProducts = List.of(
+                new Product(1, "Broad sword", ProductType.ARMOR, 2, now, now),
+                new Product(3, "Chain mail", ProductType.WEAPON, 4, now, now),
+                new Product(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now)
+        );
+
+        assertThat(sortedProducts)
+                .containsExactlyElementsOf(expectedSortedProducts);
+    }
 }
