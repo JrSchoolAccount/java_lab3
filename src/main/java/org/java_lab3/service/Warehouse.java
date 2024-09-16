@@ -3,11 +3,10 @@ package org.java_lab3.service;
 import org.java_lab3.entities.Product;
 import org.java_lab3.entities.ProductType;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
@@ -18,7 +17,7 @@ public class Warehouse {
         }
     }
 
-    public void newProduct(int id, String name, ProductType type, int rating, LocalDateTime created, LocalDateTime modified) {
+    public void newProduct(int id, String name, ProductType type, int rating, LocalDate created, LocalDate modified) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be null or empty");
         }

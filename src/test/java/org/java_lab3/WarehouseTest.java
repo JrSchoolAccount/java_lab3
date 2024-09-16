@@ -5,7 +5,7 @@ import org.java_lab3.entities.ProductType;
 import org.java_lab3.service.Warehouse;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +17,9 @@ class WarehouseTest {
     void shouldThrowExceptionWhenNameIsEmptyOrNull() {
         Warehouse warehouse = new Warehouse();
 
-        assertThatThrownBy(() -> warehouse.newProduct(1, "", ProductType.ARMOR, 10, LocalDateTime.now(), LocalDateTime.now()))
+        LocalDate now = LocalDate.now();
+
+        assertThatThrownBy(() -> warehouse.newProduct(1, "", ProductType.ARMOR, 10, now, now))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Product name cannot be null or empty");
     }
@@ -27,7 +29,7 @@ class WarehouseTest {
     void shouldAddNewProductSuccessfully(){
         Warehouse warehouse = new Warehouse();
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
 
@@ -47,7 +49,7 @@ class WarehouseTest {
     void shouldThrowExceptionWhenTryingToFindProductThatDoesNotExist(){
         Warehouse warehouse = new Warehouse();
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
 
@@ -59,7 +61,7 @@ class WarehouseTest {
     @Test
     void shouldGetProductById1ThenReturnProductNamedBroadsword(){
         Warehouse warehouse = new Warehouse();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
 
@@ -71,7 +73,7 @@ class WarehouseTest {
     @Test
     void shouldReturnAllProducts(){
         Warehouse warehouse = new Warehouse();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Broad sword", ProductType.ARMOR, 2, now, now);
         warehouse.newProduct(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now);
@@ -94,7 +96,7 @@ class WarehouseTest {
     @Test
     void shouldReturnSortedAToZ(){
         Warehouse warehouse = new Warehouse();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
         warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, now, now);
@@ -117,7 +119,7 @@ class WarehouseTest {
     void shouldThrowExceptionWhenTypeNotFound(){
         Warehouse warehouse = new Warehouse();
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
         warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, now, now);
@@ -127,4 +129,27 @@ class WarehouseTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("No products with type: ARMOR found!");
     }
+
+   @Test
+   void shouldThrowException(){
+       Warehouse warehouse = new Warehouse();
+       LocalDate now = LocalDate.now();
+
+
+   }
+
+    /* @Test
+    void shouldReturnAllProductsCreatedAfter1ofAugust(){
+        Warehouse warehouse = new Warehouse();
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime june = LocalDateTime.of(2024, 7, 31, 10, 30);
+        LocalDateTime august = LocalDateTime.of(2024, 8, 30, 10, 30);
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, june, june);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, august, august);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
+
+    }
+    */
 }
