@@ -87,7 +87,7 @@ class WarehouseTest {
 
         assertThatThrownBy(() -> warehouse.getProductsByTypeSortedAtoZ(ProductType.ARMOR))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage("No products available to sort");
+                .hasMessage("No products available!");
     }
 
 

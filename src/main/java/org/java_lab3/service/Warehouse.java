@@ -12,6 +12,12 @@ import java.util.stream.Collectors;
 public class Warehouse {
     private final List<Product> products = new ArrayList<>();
 
+    private void checkIfProductsEmpty() {
+        if (products.isEmpty()) {
+            throw new IllegalStateException("No products available!");
+        }
+    }
+
     public void newProduct(int id, String name, ProductType type, int rating, LocalDateTime created, LocalDateTime modified) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be null or empty");
@@ -25,6 +31,8 @@ public class Warehouse {
     }
 
     public List<Product> getProducts() {
+        checkIfProductsEmpty();
+
         return new ArrayList<>(products);
     }
 
@@ -37,9 +45,7 @@ public class Warehouse {
     }
 
     public List<Product> getProductsByTypeSortedAtoZ(ProductType type) {
-        if (products.isEmpty()) {
-            throw new IllegalStateException("No products available to sort");
-        }
+        checkIfProductsEmpty();
 
         List<Product> productsByType = products.stream()
                 .filter(product -> product.type().equals(type))
@@ -52,4 +58,5 @@ public class Warehouse {
 
         return productsByType;
     }
+
 }
