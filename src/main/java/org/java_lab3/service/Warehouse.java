@@ -36,13 +36,20 @@ public class Warehouse {
                     .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
     }
 
-
-    public List<Product> getAllProductsSortedAtoZ() {
+    public List<Product> getProductsByTypeSortedAtoZ(ProductType type) {
         if (products.isEmpty()) {
             throw new IllegalStateException("No products available to sort");
         }
-        return products.stream()
+
+        List<Product> productsByType = products.stream()
+                .filter(product -> product.type().equals(type))
                 .sorted(Comparator.comparing(Product::name))
-                .collect(Collectors.toList());
+                .toList();
+
+        if (productsByType.isEmpty()) {
+            throw new IllegalArgumentException("No products with type: "+ type + " found!");
+        }
+
+        return productsByType;
     }
 }

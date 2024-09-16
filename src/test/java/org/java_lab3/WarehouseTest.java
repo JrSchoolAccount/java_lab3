@@ -85,7 +85,7 @@ class WarehouseTest {
     void shouldThrowExceptionWhenListIsEmpty(){
         Warehouse warehouse = new Warehouse();
 
-        assertThatThrownBy(warehouse::getAllProductsSortedAtoZ)
+        assertThatThrownBy(() -> warehouse.getProductsByTypeSortedAtoZ(ProductType.ARMOR))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("No products available to sort");
     }
@@ -96,20 +96,35 @@ class WarehouseTest {
         Warehouse warehouse = new Warehouse();
         LocalDateTime now = LocalDateTime.now();
 
-        warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
-        warehouse.newProduct(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now);
-        warehouse.newProduct(3, "Chain mail", ProductType.ARMOR, 4, now, now);
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, now, now);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
 
-        List<Product> sortedProducts = warehouse.getAllProductsSortedAtoZ();
+        List<Product> sortedProducts = warehouse.getProductsByTypeSortedAtoZ(ProductType.WEAPON);
 
 
         List<Product> expectedSortedProducts = List.of(
-                new Product(1, "Broad sword", ProductType.WEAPON, 2, now, now),
-                new Product(3, "Chain mail", ProductType.ARMOR, 4, now, now),
-                new Product(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now)
+                new Product(3, "Broad sword", ProductType.WEAPON, 4, now, now),
+                new Product(1, "Morning star", ProductType.WEAPON, 2, now, now),
+                new Product(2, "Shiv", ProductType.WEAPON, 3, now, now)
         );
 
         assertThat(sortedProducts)
                 .containsExactlyElementsOf(expectedSortedProducts);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTypeNotFound(){
+        Warehouse warehouse = new Warehouse();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, now, now);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
+
+        assertThatThrownBy(() -> warehouse.getProductsByTypeSortedAtoZ(ProductType.ARMOR))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No products with type: ARMOR found!");
     }
 }
