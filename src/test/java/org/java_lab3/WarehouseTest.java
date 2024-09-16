@@ -85,7 +85,7 @@ class WarehouseTest {
     void shouldThrowExceptionWhenListIsEmpty(){
         Warehouse warehouse = new Warehouse();
 
-        assertThatThrownBy(warehouse::sortAtoZ)
+        assertThatThrownBy(warehouse::getAllProductsSortedAtoZ)
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("No products available to sort");
     }
@@ -96,16 +96,16 @@ class WarehouseTest {
         Warehouse warehouse = new Warehouse();
         LocalDateTime now = LocalDateTime.now();
 
-        warehouse.newProduct(1, "Broad sword", ProductType.ARMOR, 2, now, now);
+        warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
         warehouse.newProduct(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now);
-        warehouse.newProduct(3, "Chain mail", ProductType.WEAPON, 4, now, now);
+        warehouse.newProduct(3, "Chain mail", ProductType.ARMOR, 4, now, now);
 
-        List<Product> sortedProducts = warehouse.sortAtoZ();
+        List<Product> sortedProducts = warehouse.getAllProductsSortedAtoZ();
 
 
         List<Product> expectedSortedProducts = List.of(
-                new Product(1, "Broad sword", ProductType.ARMOR, 2, now, now),
-                new Product(3, "Chain mail", ProductType.WEAPON, 4, now, now),
+                new Product(1, "Broad sword", ProductType.WEAPON, 2, now, now),
+                new Product(3, "Chain mail", ProductType.ARMOR, 4, now, now),
                 new Product(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now)
         );
 

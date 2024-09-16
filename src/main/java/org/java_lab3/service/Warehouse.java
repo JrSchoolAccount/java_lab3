@@ -37,7 +37,7 @@ public class Warehouse {
     }
 
 
-    public List<Product> sortAtoZ() {
+    public List<Product> getAllProductsSortedAtoZ() {
         if (products.isEmpty()) {
             throw new IllegalStateException("No products available to sort");
         }
