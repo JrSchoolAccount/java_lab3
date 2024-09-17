@@ -181,4 +181,51 @@ class WarehouseTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("No products created after: 2024-08-01 found!");
     }
+
+    @Test
+    void shouldThrowExceptionsForNameTypeRating(){
+        Warehouse warehouse = new Warehouse();
+        LocalDate now = LocalDate.now();
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, now, now);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
+
+        assertThatThrownBy(() -> warehouse.modifyProduct(1, "", ProductType.ARTIFACT, 1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Product name cannot be null or empty!");
+
+        assertThatThrownBy(() -> warehouse.modifyProduct(2, "Shank", ProductType.ARMOR, 11))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid rating value: 11. Rating must be between 0 and 10");
+    }
+    
+    @Test
+    void shouldGetProductByIdAndModifyNameProductTypeRatingAndSetModified(){
+        Warehouse warehouse = new Warehouse();
+        LocalDate date = LocalDate.of(2024, 7, 31);
+        LocalDate now = LocalDate.now();
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, date, date);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, date, date);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, date, date);
+
+        warehouse.modifyProduct(1, "Chain mail", ProductType.ARMOR, 10);
+
+        List<Product> modifiedList = warehouse.getProducts();
+
+        assertThat(modifiedList.size()).isEqualTo(3);
+
+        Product modifiedProduct = warehouse.getProductById(1);
+
+        assertThat(modifiedProduct)
+                .extracting(Product::name, Product::type, Product::rating, Product::created, Product::modified)
+                .containsExactly(
+                        "Chain mail",
+                        ProductType.ARMOR,
+                        10,
+                        LocalDate.of(2024, 7, 31),
+                        now
+                );
+    }
 }

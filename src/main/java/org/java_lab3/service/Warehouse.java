@@ -84,4 +84,33 @@ public class Warehouse {
 
         return productsCreatedAfter;
     }
+
+    public void modifyProduct(int id, String newName, ProductType newType, int newRating) {
+        if (newName == null || newName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be null or empty!");
+        }
+
+        if (newRating < 0 || newRating > 10) {
+            throw new IllegalArgumentException("Invalid rating value: " + newRating + ". Rating must be between 0 and 10");
+        }
+
+        try {
+            Product oldProduct = getProductById(id);
+
+            Product updatedProduct = new Product(
+                    oldProduct.id(),
+                    newName,
+                    newType,
+                    newRating,
+                    oldProduct.created(),
+                    LocalDate.now()
+            );
+
+            products.remove(oldProduct);
+            products.add(updatedProduct);
+
+        } catch (Exception e){
+            throw new IllegalArgumentException("Product creation failed");
+        }
+    }
 }
