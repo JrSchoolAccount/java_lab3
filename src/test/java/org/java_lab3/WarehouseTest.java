@@ -150,10 +150,10 @@ class WarehouseTest {
         Warehouse warehouse = new Warehouse();
 
         LocalDate now = LocalDate.now();
-        LocalDate june = LocalDate.of(2024, 7, 31);
+        LocalDate july = LocalDate.of(2024, 7, 31);
         LocalDate august = LocalDate.of(2024, 8, 30);
 
-        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, june, june);
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, july, july);
         warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, august, august);
         warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
 
@@ -171,11 +171,11 @@ class WarehouseTest {
     void shouldThrowExceptionNoProductsCreatedAfter1ofAugust(){
         Warehouse warehouse = new Warehouse();
 
-        LocalDate june = LocalDate.of(2024, 7, 31);
+        LocalDate july = LocalDate.of(2024, 7, 31);
 
-        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, june, june);
-        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, june, june);
-        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, june, june);
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, july, july);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, july, july);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, july, july);
 
         assertThatThrownBy(() -> warehouse.getProductsCreatedAfter(2024, 8, 1))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -227,5 +227,39 @@ class WarehouseTest {
                         LocalDate.of(2024, 7, 31),
                         now
                 );
+    }
+
+    @Test
+    void shouldThrowExceptionNoModifiedProductsFound(){
+        Warehouse warehouse = new Warehouse();
+
+        LocalDate date = LocalDate.of(2024, 7, 1);
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, date, date);
+
+        assertThatThrownBy(warehouse::getAllModifiedProducts)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No modified products found!");
+    }
+
+    @Test
+    void shouldReturnListWithAllProductsThatWhereModified(){
+        Warehouse warehouse = new Warehouse();
+
+        LocalDate date = LocalDate.of(2024, 7, 31);
+        LocalDate now = LocalDate.now();
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, date, date);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, date, now);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, date, now);
+
+        List<Product> modifiedProducts = warehouse.getAllModifiedProducts();
+
+        List<Product> expectedProducts = List.of(
+                new Product(2, "Shiv", ProductType.WEAPON, 3, date, now),
+                new Product(3, "Broad sword", ProductType.WEAPON, 4, date, now)
+        );
+
+        assertThat(modifiedProducts).isEqualTo(expectedProducts);
     }
 }

@@ -113,4 +113,18 @@ public class Warehouse {
             throw new IllegalArgumentException("Product creation failed");
         }
     }
+
+    public List<Product> getAllModifiedProducts() {
+        checkIfProductsEmpty();
+
+        List<Product> modified = products.stream()
+                .filter(product -> !product.created().equals(product.modified()))
+                .toList();
+
+        if (modified.isEmpty()) {
+            throw new IllegalArgumentException("No modified products found!");
+        }
+
+        return modified;
+    }
 }
