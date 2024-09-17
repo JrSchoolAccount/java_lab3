@@ -127,4 +127,13 @@ public class Warehouse {
 
         return modified;
     }
+
+    public List<ProductType> getTypesWithAtLeastOneProduct() {
+        checkIfProductsEmpty();
+
+        return products.stream()
+                .map(Product::type)
+                .distinct()
+                .toList();
+    }
 }

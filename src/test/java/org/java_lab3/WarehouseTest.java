@@ -262,4 +262,21 @@ class WarehouseTest {
 
         assertThat(modifiedProducts).isEqualTo(expectedProducts);
     }
+
+    @Test
+    void shouldReturnTypesWithAtLeastOneProduct() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate date = LocalDate.now();
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, date, date);
+        warehouse.newProduct(2, "Chain mail", ProductType.ARMOR, 3, date, date);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, date, date);
+
+        List<ProductType> categoriesWithProducts = warehouse.getTypesWithAtLeastOneProduct();
+
+        assertThat(categoriesWithProducts.size()).isEqualTo(2);
+
+        assertThat(categoriesWithProducts).containsExactlyInAnyOrder(ProductType.WEAPON, ProductType.ARMOR);
+    }
+
 }
