@@ -58,4 +58,30 @@ public class Warehouse {
         return productsByType;
     }
 
+    private void checkDate(int year, int month, int day) {
+        LocalDate inputDate = LocalDate.of(year, month, day);
+        LocalDate now = LocalDate.now();
+
+        if (inputDate.isAfter(now)) {
+            throw new IllegalArgumentException("Wrong date format!");
+        }
+    }
+
+    public List<Product> getProductsCreatedAfter(int year, int month, int day) {
+        checkDate(year, month, day);
+        checkIfProductsEmpty();
+
+        LocalDate targetDate = LocalDate.of(year, month, day);
+
+        List<Product> productsCreatedAfter = products.stream()
+                        .filter(product -> product.created()
+                        .isAfter(targetDate))
+                        .toList();
+
+        if (productsCreatedAfter.isEmpty()) {
+            throw new IllegalArgumentException("No products created after: " + targetDate + " found!");
+        }
+
+        return productsCreatedAfter;
+    }
 }

@@ -131,25 +131,54 @@ class WarehouseTest {
     }
 
    @Test
-   void shouldThrowException(){
+   void shouldThrowExceptionWrongDateFormat(){
        Warehouse warehouse = new Warehouse();
        LocalDate now = LocalDate.now();
 
+       warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
+       warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, now, now);
+       warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
+
+       assertThatThrownBy(() -> warehouse.getProductsCreatedAfter(2024, 12, 1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Wrong date format!");
 
    }
 
-    /* @Test
+    @Test
     void shouldReturnAllProductsCreatedAfter1ofAugust(){
         Warehouse warehouse = new Warehouse();
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime june = LocalDateTime.of(2024, 7, 31, 10, 30);
-        LocalDateTime august = LocalDateTime.of(2024, 8, 30, 10, 30);
+        LocalDate now = LocalDate.now();
+        LocalDate june = LocalDate.of(2024, 7, 31);
+        LocalDate august = LocalDate.of(2024, 8, 30);
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, june, june);
         warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, august, august);
         warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
 
+        List<Product> sortedProducts = warehouse.getProductsCreatedAfter(2024, 8, 1);
+
+        List<Product> expectedSortedProducts = List.of(
+                new Product(2, "Shiv", ProductType.WEAPON, 3, august, august),
+                new Product(3, "Broad sword", ProductType.WEAPON, 4, now, now)
+        );
+
+        assertThat(sortedProducts).isEqualTo(expectedSortedProducts);
     }
-    */
+
+    @Test
+    void shouldThrowExceptionNoProductsCreatedAfter1ofAugust(){
+        Warehouse warehouse = new Warehouse();
+
+        LocalDate june = LocalDate.of(2024, 7, 31);
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, june, june);
+        warehouse.newProduct(2, "Shiv", ProductType.WEAPON, 3, june, june);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, june, june);
+
+        assertThatThrownBy(() -> warehouse.getProductsCreatedAfter(2024, 8, 1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No products created after: 2024-08-01 found!");
+    }
 }
