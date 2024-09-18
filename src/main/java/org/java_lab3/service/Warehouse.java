@@ -37,10 +37,10 @@ public class Warehouse {
 
     public Product getProductById(int id) {
 
-            return products.stream()
-                    .filter(product -> product.id() == id)
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
+        return products.stream()
+                .filter(product -> product.id() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
     }
 
     public List<Product> getProductsByTypeSortedAtoZ(ProductType type) {
@@ -52,7 +52,7 @@ public class Warehouse {
                 .toList();
 
         if (productsByType.isEmpty()) {
-            throw new IllegalArgumentException("No products with type: "+ type + " found!");
+            throw new IllegalArgumentException("No products with type: " + type + " found!");
         }
 
         return productsByType;
@@ -74,9 +74,9 @@ public class Warehouse {
         LocalDate targetDate = LocalDate.of(year, month, day);
 
         List<Product> productsCreatedAfter = products.stream()
-                        .filter(product -> product.created()
+                .filter(product -> product.created()
                         .isAfter(targetDate))
-                        .toList();
+                .toList();
 
         if (productsCreatedAfter.isEmpty()) {
             throw new IllegalArgumentException("No products created after: " + targetDate + " found!");
@@ -109,7 +109,7 @@ public class Warehouse {
             products.remove(oldProduct);
             products.add(updatedProduct);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new IllegalArgumentException("Product creation failed");
         }
     }
