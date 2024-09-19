@@ -136,4 +136,12 @@ public class Warehouse {
                 .distinct()
                 .toList();
     }
+
+    public long countProductsInCategory(ProductType type) {
+        checkIfProductsEmpty();
+
+        return products.stream()
+                .filter(product -> product.type().equals(type))
+                .count();
+    }
 }

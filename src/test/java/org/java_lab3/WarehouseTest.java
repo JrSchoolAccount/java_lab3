@@ -279,4 +279,22 @@ class WarehouseTest {
         assertThat(categoriesWithProducts).containsExactlyInAnyOrder(ProductType.WEAPON, ProductType.ARMOR);
     }
 
+    @Test
+    void shouldReturnCorrectProductCountForGivenCategory() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate now = LocalDate.now();
+
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
+        warehouse.newProduct(2, "Chain mail", ProductType.ARMOR, 3, now, now);
+        warehouse.newProduct(3, "Broad sword", ProductType.WEAPON, 4, now, now);
+
+        long weaponCount = warehouse.countProductsInCategory(ProductType.WEAPON);
+        assertThat(weaponCount).isEqualTo(2);
+
+        long armorCount = warehouse.countProductsInCategory(ProductType.ARMOR);
+        assertThat(armorCount).isEqualTo(1);
+    }
+
+
 }
