@@ -305,4 +305,17 @@ class WarehouseTest {
         long armorCount = warehouse.countProductsInCategory(ProductType.ARMOR);
         assertThat(armorCount).isEqualTo(1);
     }
+    
+    @Test
+    void shouldThrowExceptionWhenNoProductsAvailableForCounting(){
+        Warehouse warehouse = new Warehouse();
+        LocalDate now = LocalDate.now();
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
+        warehouse.newProduct(2, "Broad sword", ProductType.WEAPON, 4, now, now);
+
+        assertThatThrownBy(() -> warehouse.countProductsInCategory(ProductType.ARMOR))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Category with type: ARMOR has no products available!");
+    }
 }
