@@ -40,7 +40,7 @@ public class Warehouse {
         return products.stream()
                 .filter(product -> product.id() == id)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(STR."Product with id: \{id}, does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
     }
 
     public List<Product> getProductsByTypeSortedAtoZ(ProductType type) {
@@ -52,7 +52,7 @@ public class Warehouse {
                 .toList();
 
         if (productsByType.isEmpty()) {
-            throw new IllegalArgumentException(STR."No products with type: \{type} found!");
+            throw new IllegalArgumentException("No products with type: " + type + " found!");
         }
 
         return productsByType;
@@ -79,7 +79,7 @@ public class Warehouse {
                 .toList();
 
         if (productsCreatedAfter.isEmpty()) {
-            throw new IllegalArgumentException(STR."No products created after: \{targetDate} found!");
+            throw new IllegalArgumentException("No products created after: " + targetDate + " found!");
         }
 
         return productsCreatedAfter;
@@ -91,7 +91,7 @@ public class Warehouse {
         }
 
         if (newRating < 0 || newRating > 10) {
-            throw new IllegalArgumentException(STR."Invalid rating value: \{newRating}. Rating must be between 0 and 10");
+            throw new IllegalArgumentException("Invalid rating value: " + newRating + ". Rating must be between 0 and 10");
         }
 
         try {
@@ -144,7 +144,7 @@ public class Warehouse {
                 .filter(product -> product.type().equals(type))
                 .count();
         if (result == 0) {
-            throw new IllegalArgumentException(STR."Category with type: \{type} has no products available!");
+            throw new IllegalArgumentException("Category with type: " + type + " has no products available!");
         }
 
         return result;
