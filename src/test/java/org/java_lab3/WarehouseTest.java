@@ -280,6 +280,16 @@ class WarehouseTest {
     }
 
     @Test
+    void shouldThrowExceptionWhenNoProductsAvailable(){
+        Warehouse warehouse = new Warehouse();
+
+        assertThatThrownBy(warehouse::getTypesWithAtLeastOneProduct)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("No products available!");
+
+    }
+
+    @Test
     void shouldReturnCorrectProductCountForGivenCategory() {
         Warehouse warehouse = new Warehouse();
         LocalDate now = LocalDate.now();
@@ -295,6 +305,4 @@ class WarehouseTest {
         long armorCount = warehouse.countProductsInCategory(ProductType.ARMOR);
         assertThat(armorCount).isEqualTo(1);
     }
-
-
 }
