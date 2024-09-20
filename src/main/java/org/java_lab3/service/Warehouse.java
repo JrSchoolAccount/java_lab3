@@ -161,4 +161,23 @@ public class Warehouse {
                         Collectors.counting()
                 ));
     }
+
+    public List<Product> getThisMonthsMaxRankedProductsNewestFirst() {
+        checkIfProductsEmpty();
+
+        LocalDate now = LocalDate.now();
+
+        List<Product> thisMonthsMaxRatedProducts = products.stream()
+                .filter(product -> product.rating() == 10)
+                .filter(product -> product.created().getMonth() == now.getMonth() &&
+                        product.created().getYear() == now.getYear())
+                .sorted(Comparator.comparing(Product::created).reversed())
+                .toList();
+
+        if (thisMonthsMaxRatedProducts.isEmpty()) {
+            throw new IllegalArgumentException("No products with rating 10 created this month!");
+        }
+
+        return thisMonthsMaxRatedProducts;
+    }
 }

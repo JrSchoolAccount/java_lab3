@@ -336,4 +336,55 @@ class WarehouseTest {
         assertThat(productCountByLetter.get('B')).isEqualTo(1);
         assertThat(productCountByLetter.get('C')).isEqualTo(1);
     }
+
+    @Test
+    void shouldThrowExceptionsNoProductsWithMaxRatingCreatedThisMonth() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate old = LocalDate.of(2024, 6, 1);
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 10, old, old);
+        warehouse.newProduct(2, "Broad sword", ProductType.WEAPON, 10, old, old);
+        warehouse.newProduct(3, "Chain mail", ProductType.ARMOR, 4, old, old);
+
+        assertThatThrownBy(warehouse::getThisMonthsMaxRankedProductsNewestFirst)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("No products with rating 10 created this month!");
+    }
+
+    @Test
+    void shouldReturnAllMaxRatedProductsCreatedThisMonth() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate old = LocalDate.of(2024, 6, 1);
+        LocalDate thisMonth = LocalDate.of(2024, 9, 30);
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 10, thisMonth, thisMonth);
+        warehouse.newProduct(2, "Broad sword", ProductType.WEAPON, 10, old, old);
+        warehouse.newProduct(3, "Chain mail", ProductType.ARMOR, 9, thisMonth, thisMonth);
+
+        List<Product> maxRatedProductsThisMonth = warehouse.getThisMonthsMaxRankedProductsNewestFirst();
+
+        assertThat(maxRatedProductsThisMonth.size()).isEqualTo(1);
+        assertThat(maxRatedProductsThisMonth.getFirst().name()).isEqualTo("Morning star");
+        assertThat(maxRatedProductsThisMonth.getFirst().rating()).isEqualTo(10);
+        assertThat(maxRatedProductsThisMonth.getFirst().created()).isEqualTo(thisMonth);
+    }
+
+    @Test
+    void shouldReturnAllMaxRatedProductsCreatedThisMonthSortedNewestFirst() {
+        Warehouse warehouse = new Warehouse();
+        LocalDate oldest = LocalDate.of(2024, 9, 1);
+        LocalDate middle = LocalDate.of(2024, 9, 15);
+        LocalDate newest = LocalDate.of(2024, 9, 30);
+
+        warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 10, oldest, oldest);
+        warehouse.newProduct(2, "Broad sword", ProductType.WEAPON, 10, newest, newest);
+        warehouse.newProduct(3, "Chain mail", ProductType.ARMOR, 10, middle, middle);
+
+        List<Product> maxRatedProductsThisMonth = warehouse.getThisMonthsMaxRankedProductsNewestFirst();
+
+        assertThat(maxRatedProductsThisMonth.size()).isEqualTo(3);
+        assertThat(maxRatedProductsThisMonth)
+                .extracting(Product::name)
+                .containsExactly("Broad sword", "Chain mail", "Morning star");
+    }
 }
