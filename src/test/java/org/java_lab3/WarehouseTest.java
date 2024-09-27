@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -67,6 +68,8 @@ class WarehouseTest {
         warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
 
         assertThat(warehouse.getProductById(1))
+                .isPresent()
+                .get()
                 .extracting(Product::name)
                 .isEqualTo("Broad sword");
     }
@@ -217,9 +220,11 @@ class WarehouseTest {
 
         assertThat(modifiedList.size()).isEqualTo(3);
 
-        Product modifiedProduct = warehouse.getProductById(1);
+        Optional<Product> modifiedProduct = warehouse.getProductById(1);
 
         assertThat(modifiedProduct)
+                .isPresent()
+                .get()
                 .extracting(Product::name, Product::type, Product::rating, Product::created, Product::modified)
                 .containsExactly(
                         "Chain mail",

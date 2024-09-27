@@ -4,10 +4,7 @@ import org.java_lab3.entities.Product;
 import org.java_lab3.entities.ProductType;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Warehouse {
@@ -37,12 +34,12 @@ public class Warehouse {
         return new ArrayList<>(products);
     }
 
-    public Product getProductById(int id) {
+    public Optional<Product> getProductById(int id) {
 
-        return products.stream()
+        return Optional.ofNullable(products.stream()
                 .filter(product -> product.id() == id)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist")));
     }
 
     public List<Product> getProductsByTypeSortedAtoZ(ProductType type) {
@@ -95,23 +92,22 @@ public class Warehouse {
         if (newRating < 0 || newRating > 10) {
             throw new IllegalArgumentException("Invalid rating value: " + newRating + ". Rating must be between 0 and 10");
         }
+            Optional<Product> oldProduct = getProductById(id);
 
-        try {
-            Product oldProduct = getProductById(id);
-
+            if (oldProduct.isPresent()) {
             Product updatedProduct = new Product(
-                    oldProduct.id(),
+                    oldProduct.get().id(),
                     newName,
                     newType,
                     newRating,
-                    oldProduct.created(),
+                    oldProduct.get().created(),
                     LocalDate.now()
             );
 
-            products.remove(oldProduct);
+            products.remove(oldProduct.get());
             products.add(updatedProduct);
 
-        } catch (Exception e) {
+        } else  {
             throw new IllegalArgumentException("Product creation failed");
         }
     }
