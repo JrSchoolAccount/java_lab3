@@ -28,7 +28,7 @@ public class Warehouse {
         }
     }
 
-    public List<Product> getProducts() {
+    public List<Product> getAllProducts() {
         checkIfProductsEmpty();
 
         return new ArrayList<>(products);

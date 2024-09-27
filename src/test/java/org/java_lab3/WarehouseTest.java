@@ -36,7 +36,7 @@ class WarehouseTest {
 
         warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
 
-        List<Product> products = warehouse.getProducts();
+        List<Product> products = warehouse.getAllProducts();
         assertThat(products.size()).isEqualTo(1);
 
         Product product = products.getFirst();
@@ -84,7 +84,7 @@ class WarehouseTest {
         warehouse.newProduct(2, "Pendulum of doom", ProductType.ARTIFACT, 3, now, now);
         warehouse.newProduct(3, "Chain mail", ProductType.WEAPON, 4, now, now);
 
-        List<Product> products = warehouse.getProducts();
+        List<Product> products = warehouse.getAllProducts();
         assertThat(products.size()).isEqualTo(3);
     }
 
@@ -217,7 +217,7 @@ class WarehouseTest {
 
         warehouse.modifyProduct(1, "Chain mail", ProductType.ARMOR, 10);
 
-        List<Product> modifiedList = warehouse.getProducts();
+        List<Product> modifiedList = warehouse.getAllProducts();
 
         assertThat(modifiedList.size()).isEqualTo(3);
 
