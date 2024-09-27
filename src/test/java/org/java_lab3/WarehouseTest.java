@@ -14,10 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class WarehouseTest {
+    Warehouse warehouse = new Warehouse();
 
     @Test
     void shouldThrowExceptionWhenNameIsEmptyOrNull() {
-        Warehouse warehouse = new Warehouse();
+        
 
         LocalDate now = LocalDate.now();
 
@@ -29,7 +30,7 @@ class WarehouseTest {
 
     @Test
     void shouldAddNewProductSuccessfully() {
-        Warehouse warehouse = new Warehouse();
+        
 
         LocalDate now = LocalDate.now();
 
@@ -48,21 +49,21 @@ class WarehouseTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenTryingToFindProductThatDoesNotExist() {
+    void shouldReturnEmptyOptionalWhenTryingToFindProductThatDoesNotExist() {
         Warehouse warehouse = new Warehouse();
 
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
 
-        assertThatThrownBy(() -> warehouse.getProductById(2))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Product with id: 2, does not exist");
+        Optional<Product> result = warehouse.getProductById(2);
+
+        assertThat(result).isEmpty();
     }
 
     @Test
     void shouldGetProductById1ThenReturnProductNamedBroadsword() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Broad sword", ProductType.WEAPON, 2, now, now);
@@ -76,7 +77,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnAllProducts() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Broad sword", ProductType.ARMOR, 2, now, now);
@@ -89,7 +90,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionWhenListIsEmpty() {
-        Warehouse warehouse = new Warehouse();
+        
 
         assertThatThrownBy(() -> warehouse.getProductsByTypeSortedAtoZ(ProductType.ARMOR))
                 .isInstanceOf(IllegalStateException.class)
@@ -99,7 +100,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnSortedAToZ() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
@@ -121,7 +122,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionWhenTypeNotFound() {
-        Warehouse warehouse = new Warehouse();
+        
 
         LocalDate now = LocalDate.now();
 
@@ -136,7 +137,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionWrongDateFormat() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
@@ -151,7 +152,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnAllProductsCreatedAfter1ofAugust() {
-        Warehouse warehouse = new Warehouse();
+        
 
         LocalDate now = LocalDate.now();
         LocalDate july = LocalDate.of(2024, 7, 31);
@@ -173,7 +174,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionNoProductsCreatedAfter1ofAugust() {
-        Warehouse warehouse = new Warehouse();
+        
 
         LocalDate july = LocalDate.of(2024, 7, 31);
 
@@ -188,7 +189,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionsForNameTypeRating() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
@@ -206,7 +207,7 @@ class WarehouseTest {
 
     @Test
     void shouldGetProductByIdAndModifyNameProductTypeRatingAndSetModified() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate date = LocalDate.of(2024, 7, 31);
         LocalDate now = LocalDate.now();
 
@@ -237,7 +238,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionNoModifiedProductsFound() {
-        Warehouse warehouse = new Warehouse();
+        
 
         LocalDate date = LocalDate.of(2024, 7, 1);
 
@@ -250,7 +251,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnListWithAllProductsThatWhereModified() {
-        Warehouse warehouse = new Warehouse();
+        
 
         LocalDate date = LocalDate.of(2024, 7, 31);
         LocalDate now = LocalDate.now();
@@ -271,7 +272,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnTypesWithAtLeastOneProduct() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate date = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, date, date);
@@ -287,7 +288,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionWhenNoProductsAvailable() {
-        Warehouse warehouse = new Warehouse();
+        
 
         assertThatThrownBy(warehouse::getTypesWithAtLeastOneProduct)
                 .isInstanceOf(IllegalStateException.class)
@@ -297,7 +298,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnCorrectProductCountForGivenCategory() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
 
@@ -314,7 +315,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionWhenNoProductsAvailableForCounting() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
@@ -327,7 +328,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnProductCountByStartingLetterSuccessfully() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate now = LocalDate.now();
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 2, now, now);
@@ -344,7 +345,7 @@ class WarehouseTest {
 
     @Test
     void shouldThrowExceptionsNoProductsWithMaxRatingCreatedThisMonth() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate old = LocalDate.of(2024, 6, 1);
 
         warehouse.newProduct(1, "Morning star", ProductType.WEAPON, 10, old, old);
@@ -358,7 +359,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnAllMaxRatedProductsCreatedThisMonth() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate old = LocalDate.of(2024, 6, 1);
         LocalDate thisMonth = LocalDate.of(2024, 9, 30);
 
@@ -376,7 +377,7 @@ class WarehouseTest {
 
     @Test
     void shouldReturnAllMaxRatedProductsCreatedThisMonthSortedNewestFirst() {
-        Warehouse warehouse = new Warehouse();
+        
         LocalDate oldest = LocalDate.of(2024, 9, 1);
         LocalDate middle = LocalDate.of(2024, 9, 15);
         LocalDate newest = LocalDate.of(2024, 9, 30);

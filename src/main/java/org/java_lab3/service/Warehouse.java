@@ -36,10 +36,9 @@ public class Warehouse {
 
     public Optional<Product> getProductById(int id) {
 
-        return Optional.ofNullable(products.stream()
+        return  products.stream()
                 .filter(product -> product.id() == id)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product with id: " + id + ", does not exist")));
+                .findFirst();
     }
 
     public List<Product> getProductsByTypeSortedAtoZ(ProductType type) {
